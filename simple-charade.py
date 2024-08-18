@@ -5,20 +5,19 @@ COMPLETED_WORDS_FILE = "charade_printed.md"
 
 
 ########################################################################
-def sync_with_git(action, file=None):
+def git_commands(action=None, file=None):
     from git import Repo
     repo = Repo('.')
     if action == 'push':
         repo.git.add(file)
         repo.index.commit('[auto] syncing done words.')
-        origin = repo.remote(name='origin')
-        origin.push()
+        print(repo.git.push())
     elif action == 'clean':
-        repo.git.restore(file)
+        print(repo.git.restore(file))
     elif action == 'pull':
-        repo.git.pull()
+        print(repo.git.pull())
     else:
-        print("unknown command")
+        print(repo.git.status())
 
 
 try:
@@ -27,18 +26,22 @@ try:
         command = sys.argv[1]
         if command in ("push"):
             print("pushing to git...")
-            sync_with_git('push', COMPLETED_WORDS_FILE)
+            git_commands('push', COMPLETED_WORDS_FILE)
             print("pushed")
             sys.exit()
         elif command in ("clean", "restore", "discard"):
             print("cleaning...")
-            sync_with_git('clean', COMPLETED_WORDS_FILE)
+            git_commands('clean', COMPLETED_WORDS_FILE)
             print("cleaned")
             sys.exit()
         elif command in ("pull"):
             print("pulling...")
-            sync_with_git('pull')
+            git_commands('pull')
             print("pulled")
+            sys.exit()
+        elif command in ("status"):
+            print("status...")
+            git_commands()
             sys.exit()
 
 except Exception as catch_all:
