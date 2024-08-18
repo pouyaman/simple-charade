@@ -33,7 +33,7 @@ with open(SOURCE_FILE) as f:
 printed_strings = []
 
 # openning with w+ mode allows the file to be auto generated if it doesn't exist
-with open(COMPLETED_WORDS_FILE, 'w+') as f:
+with open(COMPLETED_WORDS_FILE, 'r') as f:
     printed_strings = [line.rstrip() for line in f]
 
 
