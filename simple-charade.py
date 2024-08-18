@@ -3,6 +3,29 @@ import random
 SOURCE_FILE = "charade_words.md"
 COMPLETED_WORDS_FILE = "charade_printed.md"
 
+
+########################################################################
+def sync_with_git():
+    from git import Repo
+    repo = Repo('.')
+    repo.git.add(COMPLETED_WORDS_FILE)
+    repo.index.commit('[auto] syncing done words.')
+    origin = repo.remote(name='origin')
+    origin.push()
+
+
+try:
+    import sys
+    if sys.argv[1] in ("push", "git", "sync"):
+        print("syncing with git...")
+        sync_with_git()
+        print("synced")
+        sys.exit()
+except Exception as catch_all:
+    print("!!! sync not possible !!!")
+    print(catch_all)
+########################################################################
+
 all_words = []
 with open(SOURCE_FILE) as f:
     all_words = [line.rstrip() for line in f]
