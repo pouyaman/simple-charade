@@ -16,7 +16,7 @@ def sync_with_git():
 
 try:
     import sys
-    if sys.argv[1] in ("push", "git", "sync"):
+    if len(sys.argv) > 1 and sys.argv[1] in ("push", "git", "sync"):
         print("syncing with git...")
         sync_with_git()
         print("synced")
