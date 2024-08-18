@@ -5,22 +5,42 @@ COMPLETED_WORDS_FILE = "charade_printed.md"
 
 
 ########################################################################
-def sync_with_git():
+def sync_with_git(action, file=None):
     from git import Repo
     repo = Repo('.')
-    repo.git.add(COMPLETED_WORDS_FILE)
-    repo.index.commit('[auto] syncing done words.')
-    origin = repo.remote(name='origin')
-    origin.push()
+    if action == 'push':
+        repo.git.add(file)
+        repo.index.commit('[auto] syncing done words.')
+        origin = repo.remote(name='origin')
+        origin.push()
+    elif action == 'clean':
+        repo.git.restore(file)
+    elif action == 'pull':
+        repo.git.pull()
+    else:
+        print("unknown command")
 
 
 try:
     import sys
-    if len(sys.argv) > 1 and sys.argv[1] in ("push", "git", "sync"):
-        print("syncing with git...")
-        sync_with_git()
-        print("synced")
-        sys.exit()
+    if len(sys.argv) == 2:
+        command = sys.argv[1]
+        if command in ("push"):
+            print("pushing to git...")
+            sync_with_git('push', COMPLETED_WORDS_FILE)
+            print("pushed")
+            sys.exit()
+        elif command in ("clean", "restore", "discard"):
+            print("cleaning...")
+            sync_with_git('clean', COMPLETED_WORDS_FILE)
+            print("cleaned")
+            sys.exit()
+        elif command in ("pull"):
+            print("pulling...")
+            sync_with_git('pull')
+            print("pulled")
+            sys.exit()
+
 except Exception as catch_all:
     print("!!! sync not possible !!!")
     print(catch_all)
