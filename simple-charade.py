@@ -22,26 +22,34 @@ def git_commands(action=None, file=None):
 
 try:
     import sys
-    if len(sys.argv) == 2:
-        command = sys.argv[1]
-        if command in ("push"):
-            print("pushing to git...")
-            git_commands('push', COMPLETED_WORDS_FILE)
-            print("pushed")
-            sys.exit()
-        elif command in ("clean", "restore", "discard"):
-            print("cleaning...")
-            git_commands('clean', COMPLETED_WORDS_FILE)
-            print("cleaned")
-            sys.exit()
-        elif command in ("pull"):
-            print("pulling...")
-            git_commands('pull')
-            print("pulled")
-            sys.exit()
-        elif command in ("status"):
-            print("status...")
-            git_commands()
+    args = len(sys.argv)
+    if args >= 2:
+        if args == 2:
+            command = sys.argv[1]
+            if command in ("push"):
+                print("pushing to git...")
+                git_commands('push', COMPLETED_WORDS_FILE)
+                print("pushed")
+                sys.exit()
+            elif command in ("clean", "restore", "discard"):
+                print("cleaning...")
+                git_commands('clean', COMPLETED_WORDS_FILE)
+                print("cleaned")
+                sys.exit()
+            elif command in ("pull"):
+                print("pulling...")
+                git_commands('pull')
+                print("pulled")
+                sys.exit()
+            elif command in ("status"):
+                print("status...")
+                git_commands()
+                sys.exit()
+            else:
+                print("unknown command...")
+                sys.exit()
+        else:
+            print("only 1 command at a time!")
             sys.exit()
 
 except Exception as catch_all:
